@@ -1,3 +1,4 @@
+import React from 'react';
 import config from "../config.json";
 import styled from "styled-components";
 import { CSSReset } from "../src/components/CSSReset";
@@ -8,16 +9,25 @@ function HomePage() {
   const styleHomePage = { 
     // backgroundColor: "red" 
   };
+  const [valorDoFiltro, setValorDoFiltro] = React.useState("")
 
 
   return (
     <>
-    <CSSReset/>
-      <div style={styleHomePage}>
-        <Menu/>
-        <Header />
-        <Timeline playlists={config.playlists} />
-      </div>
+   
+      <CSSReset/>
+      <div style={{
+      display: "flex",
+      flexDirection: "column",
+      flex: 1,
+      }}>
+        {/* // <div style={styleHomePage}> */}
+          <Menu valorDoFiltro={valorDoFiltro} setValorDoFiltro= {setValorDoFiltro}/>
+          <Header />
+          <Timeline searchValue={valorDoFiltro} playlists={config.playlists}>
+            Conteúdo
+          </Timeline>
+        </div>
     </>
   )
 }
@@ -32,13 +42,12 @@ export default HomePage
 //   )
 // }
 const StyleHeader = styled.div`
-  img{
+  img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   }
   .user-info{
-    margin-top: 50px;
     display:flex;
     align-itens: center;
     width: 100%;
@@ -47,11 +56,18 @@ const StyleHeader = styled.div`
 
   }
 `;
+const StyledBanner = styled.div`
+  background-color:red;
+  background-image: url(${({bg})=>bg});
+  height: 230px;
+`
+// pode ser substituido p/ parametros acima-> "background-imag: url(${config.bg});
+
 function Header() {
   return (
 
     <StyleHeader>
-      {/* <img src="banner"/> */}
+      <StyledBanner bg={config.bg}/>
       <section className="user-info">
         <img src={`https://github.com/${config.github}.png`} />
         <div>
@@ -67,21 +83,25 @@ function Header() {
 
   )
 }
-function Timeline(props) {
+  function Timeline({searchValue, ...props}) {
   const playlistsName = Object.keys(props.playlists)
   return (
     <StyledTimeline>
       {playlistsName.map((playlistsName) => {
         const videos = props.playlists[playlistsName]
-        console.log(playlistsName);
-        console.log(videos);
+        // console.log(playlistsName);
+        // console.log(videos);
         return (
-          <section>
+          <section key={playlistsName}>
             <h2>{playlistsName}</h2>
             <div>
-              {videos.map((videos) => {
+              {videos.filter((videos)=>{
+                const titleNormalized = videos.title.toLowerCase();
+                const searchvalueNormalized = searchValue.toLowerCase();
+                return titleNormalized.includes(searchvalueNormalized)
+              }).map((videos) => {
                 return (
-                  <a href={videos.url}>
+                  <a key={videos.url} href={videos.url}>
                     <img src={videos.thumb} />
                     <span>
                       {videos.title}
