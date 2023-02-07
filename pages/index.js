@@ -1,21 +1,17 @@
 import React from 'react';
 import config from "../config.json";
 import styled from "styled-components";
-import { CSSReset } from "../src/components/CSSReset";
 import Menu from "../src/components/Menu";
 import {StyledTimeline} from "../src/components/Timeline";
 
 function HomePage() {
-  const styleHomePage = { 
-    // backgroundColor: "red" 
-  };
+ 
   const [valorDoFiltro, setValorDoFiltro] = React.useState("")
 
 
   return (
     <>
    
-      <CSSReset/>
       <div style={{
       display: "flex",
       flexDirection: "column",
@@ -42,10 +38,12 @@ export default HomePage
 //   )
 // }
 const StyleHeader = styled.div`
+  background-color: ${({theme})=> theme.backgroundLevel1};
+
   img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
   }
   .user-info{
     display:flex;
@@ -53,19 +51,17 @@ const StyleHeader = styled.div`
     width: 100%;
     padding: 16px 32px;
     gap: 16px
-
   }
 `;
 const StyledBanner = styled.div`
-  background-color:red;
-  background-image: url(${({bg})=>bg});
+  background-color: blue;
+  background-image: url(${({ bg }) =>bg });
   height: 230px;
-`
+`;
 // pode ser substituido p/ parametros acima-> "background-imag: url(${config.bg});
 
 function Header() {
   return (
-
     <StyleHeader>
       <StyledBanner bg={config.bg}/>
       <section className="user-info">
@@ -89,8 +85,6 @@ function Header() {
     <StyledTimeline>
       {playlistsName.map((playlistsName) => {
         const videos = props.playlists[playlistsName]
-        // console.log(playlistsName);
-        // console.log(videos);
         return (
           <section key={playlistsName}>
             <h2>{playlistsName}</h2>
